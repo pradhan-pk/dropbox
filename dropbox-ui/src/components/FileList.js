@@ -23,7 +23,7 @@ function FileList() {
         fetchFiles();
     }, []);
 
-    const handleDownload = async (fileId) => {
+    const handleDownload = async (fileId, filename) => {
         const token = localStorage.getItem('token');
         try {
             const response = await axios.get(`http://localhost:8000/download/${fileId}`, {
@@ -36,7 +36,7 @@ function FileList() {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', 'file_name_here');
+            link.setAttribute('download', filename);
             document.body.appendChild(link);
             link.click();
         } catch (error) {
@@ -51,8 +51,8 @@ function FileList() {
             <ul>
                 {files.map((file) => (
                     <li key={file.id}>
-                        {file.name}
-                        <button onClick={() => handleDownload(file.id)}>Download</button>
+                        {file.filename}
+                        <button onClick={() => handleDownload(file.id, file.filename)}>Download</button>
                     </li>
                 ))}
             </ul>
